@@ -9,3 +9,39 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Company {
+  id       Int        @id @default(autoincrement())
+  name     String     @unique
+  apikey   String     @default(uuid())
+  Employee Employee[]
+
+  @@map("companies")
+}
+
+model Employee {
+  id        Int     @id @default(autoincrement())
+  fullName  String
+  cpf       String  @unique
+  email     String  @unique
+  company   Company @relation(fields: [companyId], references: [id])
+  companyId Int
+
+  @@map("employees")
+}
+
+enum BusinessType {
+  groceries
+  restaurants
+  transport
+  education
+  health
+}
+
+model Business {
+  id   Int          @id @default(autoincrement())
+  name String       @unique
+  type BusinessType
+
+  @@map("businesses")
+}

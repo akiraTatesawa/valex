@@ -2,13 +2,17 @@
   "name": "valex",
   "version": "1.0.0",
   "description": "Valex is a voucher card API. The API is responsible for creating, reloading, activating, as well as processing purchases.",
-  "main": "/server.js",
+  "main": "dist/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx tsc && npx prisma generate && npx prisma migrate deploy && npx prisma db seed",
     "start": "node ./dist/src/server.js",
     "dev": "NODE_ENV=dev ts-node-dev --respawn --transpile-only --exit-child --ignore-watch node_modules ./src/server.ts",
-    "migrate": "npx prisma generate && npx prisma migrate dev"
+    "dev:migrate": "npx prisma generate && npx prisma migrate dev",
+    "dev:seed": "npm run dev:migrate && npx prisma db seed"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/Seed.ts"
   },
   "repository": {
     "type": "git",
@@ -21,6 +25,7 @@
   },
   "homepage": "https://github.com/akiraTatesawa/valex#readme",
   "dependencies": {
+    "@ngneat/falso": "^6.1.0",
     "@prisma/client": "^4.5.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
