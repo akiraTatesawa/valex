@@ -29,3 +29,19 @@ model Employee {
 
   @@map("employees")
 }
+
+enum BusinessType {
+  groceries
+  restaurants
+  transport
+  education
+  health
+}
+
+model Business {
+  id   Int          @id @default(autoincrement())
+  name String       @unique
+  type BusinessType
+
+  @@map("businesses")
+}
