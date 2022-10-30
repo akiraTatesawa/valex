@@ -1,0 +1,15 @@
+node_modules/
+dist/
+
+# Editor directories and files
+coverage
+.vscode/*
+!.vscode/extensions.json
+.env
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
