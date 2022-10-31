@@ -13,7 +13,7 @@ datasource db {
 model Company {
   id       Int        @id @default(autoincrement())
   name     String     @unique
-  apikey   String     @default(uuid())
+  apikey   String     @unique @default(uuid())
   Employee Employee[]
 
   @@map("companies")
@@ -26,6 +26,7 @@ model Employee {
   email     String  @unique
   company   Company @relation(fields: [companyId], references: [id])
   companyId Int
+  Card      Card[]
 
   @@map("employees")
 }
@@ -44,4 +45,25 @@ model Business {
   type BusinessType
 
   @@map("businesses")
+}
+
+model Card {
+  id             Int          @id @default(autoincrement())
+  employee       Employee     @relation(fields: [employeeId], references: [id])
+  employeeId     Int
+  number         String
+  cardholderName String
+  securityCode   String
+  expirationDate String
+  password       String?
+  isBlocked      Boolean      @default(false)
+  isVirtual      Boolean      @default(false)
+  type           BusinessType
+
+  originalCard   Card?  @relation("VirtualCards", fields: [originalCardId], references: [id])
+  originalCardId Int?
+  virtualCard    Card[] @relation("VirtualCards")
+
+  @@unique([employeeId, type], name: "employee_type")
+  @@map("cards")
 }
