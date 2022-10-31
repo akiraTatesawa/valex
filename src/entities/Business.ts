@@ -13,7 +13,7 @@ export class Business extends Entity<BusinessProps> {
 
   public static create({ name, type }: BusinessProps) {
     if (name.length === 0) {
-      throw Error("Business name cannot be empty");
+      throw new Error("Business name cannot be empty");
     }
 
     return new Business({ name, type });

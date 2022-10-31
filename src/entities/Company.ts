@@ -13,7 +13,7 @@ export class Company extends Entity<CompanyProps> {
 
   public static create({ name, apikey }: CompanyProps) {
     if (name.length === 0) {
-      throw Error("Company name cannot be empty");
+      throw new Error("Company name cannot be empty");
     }
 
     return new Company({
