@@ -39,4 +39,4 @@ jobs:
           fail_on_empty: true
 
       - name: Run all tests
-        run: npm run test
+        run: npm run ci:test
