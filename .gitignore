@@ -6,6 +6,7 @@ coverage
 .vscode/*
 !.vscode/extensions.json
 .env
+.env.test
 .idea
 .DS_Store
 *.suo
