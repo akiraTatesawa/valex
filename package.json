@@ -4,7 +4,7 @@
   "description": "Valex is a voucher card API. The API is responsible for creating, reloading, activating, as well as processing purchases.",
   "main": "dist/server.js",
   "scripts": {
-    "test": "dotenv -e .env.test -- npx prisma migrate dev && dotenv -e .env.test -- npx prisma db seed && dotenv -e .env.test -- jest --runInBand",
+    "test": "dotenv -e .env.test -- npx prisma migrate dev && dotenv -e .env.test -- jest --runInBand",
     "test:unit": "jest unit",
     "test:entity": "jest --passWithNoTests --testPathPattern=/entities",
     "test:int": "dotenv -e .env.test -- npx prisma migrate dev && dotenv -e .env.test -- npx prisma db seed && dotenv -e .env.test -- jest int --runInBand",

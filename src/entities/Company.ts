@@ -1,4 +1,5 @@
 import { randUuid } from "@ngneat/falso";
+import { CustomError } from "../errors";
 import { Entity } from "./Entity";
 
 interface CompanyProps {
@@ -13,7 +14,10 @@ export class Company extends Entity<CompanyProps> {
 
   public static create({ name, apikey }: CompanyProps) {
     if (name.length === 0) {
-      throw new Error("Company name cannot be empty");
+      throw new CustomError(
+        "error_internal_server_error",
+        "Company name cannot be empty"
+      );
     }
 
     return new Company({

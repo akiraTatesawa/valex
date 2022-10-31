@@ -1,5 +1,6 @@
 import { randCreditCardNumber, randCreditCardCVV } from "@ngneat/falso";
 import dayjs from "dayjs";
+import { CustomError } from "../errors";
 
 import { BusinessType } from "../types/business";
 import { Entity } from "./Entity";
@@ -29,7 +30,10 @@ export class Card extends Entity<CardProps> {
 
   public static create({ cardholderName, employeeId, type }: CreateCardProps) {
     if (cardholderName.length === 0) {
-      throw new Error("Cardholder Name cannot be empty");
+      throw new CustomError(
+        "error_internal_server_error",
+        "Cardholder Name cannot be empty"
+      );
     }
 
     const cardNumber = randCreditCardNumber();
