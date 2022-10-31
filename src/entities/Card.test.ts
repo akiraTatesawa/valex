@@ -1,10 +1,10 @@
-import { randNumber, randUserName } from "@ngneat/falso";
+import { randNumber, randFullName } from "@ngneat/falso";
 import { BusinessType } from "../types/business";
 import { Card } from "./Card";
 
 describe("Card Entity", () => {
   it("Should be able to create a Card Entity", () => {
-    const cardholderName = randUserName();
+    const cardholderName = randFullName();
     const employeeId = randNumber();
     const type: BusinessType = "education";
 
@@ -18,7 +18,6 @@ describe("Card Entity", () => {
     expect(card.props).toHaveProperty("number");
     expect(card.props.password).toEqual(null);
     expect(card.props.originalCardId).toEqual(null);
-    expect(card.props.cardholderName).toEqual(cardholderName);
     expect(card.props.employeeId).toEqual(employeeId);
     expect(card.props.type).toEqual(type);
   });
@@ -33,6 +32,6 @@ describe("Card Entity", () => {
         employeeId,
         type,
       });
-    }).toThrow("Cardholder Name cannot be empty");
+    }).toThrow();
   });
 });

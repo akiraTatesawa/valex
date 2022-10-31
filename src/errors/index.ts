@@ -37,9 +37,9 @@ interface CustomErrorInterface {
 }
 
 export class CustomError implements CustomErrorInterface {
-  type: ErrorType;
+  public type: ErrorType;
 
-  message: string;
+  public message: string;
 
   constructor(type: ErrorType, message: string) {
     this.type = type;
