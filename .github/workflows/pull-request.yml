@@ -5,6 +5,7 @@ on: [pull_request]
 jobs:
   pull-request:
     runs-on: ubuntu-latest
+    environment: TEST
 
     services:
       db_postgres:
