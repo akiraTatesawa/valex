@@ -78,7 +78,7 @@ describe("POST /cards", () => {
       "x-api-key": "",
     });
 
-    expect(response.statusCode).toEqual(httpStatus.UNPROCESSABLE_ENTITY);
+    expect(response.statusCode).toEqual(httpStatus.BAD_REQUEST);
     expect(response.body).toHaveProperty("message");
   });
 
@@ -93,7 +93,7 @@ describe("POST /cards", () => {
       "x-api-key": "1235",
     });
 
-    expect(response.statusCode).toEqual(httpStatus.UNPROCESSABLE_ENTITY);
+    expect(response.statusCode).toEqual(httpStatus.BAD_REQUEST);
     expect(response.body).toHaveProperty("message");
   });
 });

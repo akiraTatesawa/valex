@@ -4,6 +4,7 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 
 import { Card as PrismaCard } from "@prisma/client";
 import Cryptr from "cryptr";
+import bcrypt from "bcrypt";
 import { ICardRepository } from "../../repositories/ICardRepository";
 import { CustomError } from "../../errors/index";
 
@@ -14,7 +15,10 @@ export interface CardValidator {
   validateCardOrFail(id: number): Promise<PrismaCard>;
   validateExpirationDateOrFail(card: PrismaCard): void;
   ensureCardIsNotActive(card: PrismaCard): void;
+  ensureCardIsActive(card: PrismaCard): void;
   validateSecurityCodeOrFail(card: PrismaCard, cvv: string): void;
+  validatePasswordOrFail(card: PrismaCard, reqPass: string): void;
+  ensureCardIsNotBlocked(card: PrismaCard): void;
 }
 
 export class CardValidatorImpl implements CardValidator {
@@ -34,7 +38,7 @@ export class CardValidatorImpl implements CardValidator {
     return card;
   }
 
-  validateExpirationDateOrFail({ expirationDate }: PrismaCard): void {
+  public validateExpirationDateOrFail({ expirationDate }: PrismaCard): void {
     const isExpired = dayjs().isSameOrAfter(dayjs(expirationDate, "MM/YY"));
 
     if (isExpired) {
@@ -45,7 +49,7 @@ export class CardValidatorImpl implements CardValidator {
     }
   }
 
-  ensureCardIsNotActive({ password }: PrismaCard): void {
+  public ensureCardIsNotActive({ password }: PrismaCard): void {
     if (password) {
       throw new CustomError(
         "error_unprocessable_entity",
@@ -54,13 +58,40 @@ export class CardValidatorImpl implements CardValidator {
     }
   }
 
-  validateSecurityCodeOrFail({ securityCode }: PrismaCard, cvv: string): void {
+  public ensureCardIsActive({ password }: PrismaCard): void {
+    if (!password) {
+      throw new CustomError("error_unprocessable_entity", "Card is not active");
+    }
+  }
+
+  public validateSecurityCodeOrFail(
+    { securityCode }: PrismaCard,
+    cvv: string
+  ): void {
     const cryptr = new Cryptr(`${process.env.CRYPTR_SECRET}`);
 
     const decryptedCVV = cryptr.decrypt(securityCode);
 
     if (decryptedCVV !== cvv) {
       throw new CustomError("error_unauthorized", "Wrong CVV");
+    }
+  }
+
+  public validatePasswordOrFail(
+    { password }: PrismaCard,
+    reqPass: string
+  ): void {
+    if (password && !bcrypt.compareSync(reqPass, password)) {
+      throw new CustomError("error_unauthorized", "Wrong password");
+    }
+  }
+
+  public ensureCardIsNotBlocked({ isBlocked }: PrismaCard): void {
+    if (isBlocked) {
+      throw new CustomError(
+        "error_unprocessable_entity",
+        "The card is blocked"
+      );
     }
   }
 }

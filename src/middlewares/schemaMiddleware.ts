@@ -20,7 +20,7 @@ export function validateBody(validator: BodyValidator) {
 
     if (error) {
       const message = error.details.map((detail) => detail.message).join("; ");
-      throw new CustomError("error_unprocessable_entity", message);
+      throw new CustomError("error_bad_request", message);
     }
 
     return next();
@@ -43,7 +43,7 @@ export function validateHeader(validator: HeaderValidator) {
 
     if (error) {
       const message = error.details.map((detail) => detail.message).join("; ");
-      throw new CustomError("error_unprocessable_entity", message);
+      throw new CustomError("error_bad_request", message);
     }
 
     return next();
@@ -66,7 +66,7 @@ export function validateParams(validator: ParamsValidator) {
 
     if (error) {
       const message = error.details.map((detail) => detail.message).join("; ");
-      throw new CustomError("error_unprocessable_entity", message);
+      throw new CustomError("error_bad_request", message);
     }
 
     return next();
