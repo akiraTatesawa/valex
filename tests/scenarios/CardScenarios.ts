@@ -57,7 +57,7 @@ export class CardScenarios {
     const { prismaEmployee, createCardData, headers } =
       await this.createCardScenario();
 
-    const cardEntity = this.cardFactory.createCard({
+    const { card: cardEntity } = this.cardFactory.createCard({
       cardholderName: prismaEmployee.fullName,
       employeeId: prismaEmployee.id,
       type: createCardData.type,
