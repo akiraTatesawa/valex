@@ -1,11 +1,12 @@
 import { NextFunction, Request, Response } from "express";
-import { createCardSchema } from "../schemas";
+import { createCardSchema, apiKeySchema, paramsIdSchema } from "../schemas";
 
 import { CustomError } from "../errors";
-import { apiKeySchema } from "../schemas/headerSchemas";
+import { activateCardSchema } from "../schemas/cardSchemas";
 
 const BodySchemas = {
   createCardSchema,
+  activateCardSchema,
 };
 
 type BodyValidator = keyof typeof BodySchemas;
@@ -37,6 +38,29 @@ export function validateHeader(validator: HeaderValidator) {
     const header = req.headers[validator];
 
     const { error } = HeaderSchemas[validator].validate(header, {
+      abortEarly: false,
+    });
+
+    if (error) {
+      const message = error.details.map((detail) => detail.message).join("; ");
+      throw new CustomError("error_unprocessable_entity", message);
+    }
+
+    return next();
+  };
+}
+
+const ParamsSchemas = {
+  id: paramsIdSchema,
+};
+
+type ParamsValidator = keyof typeof ParamsSchemas;
+
+export function validateParams(validator: ParamsValidator) {
+  return async (req: Request, _res: Response, next: NextFunction) => {
+    const header = req.params[validator];
+
+    const { error } = ParamsSchemas[validator].validate(header, {
       abortEarly: false,
     });
 
