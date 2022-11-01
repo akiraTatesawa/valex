@@ -10,6 +10,25 @@ export class PrismaCardRepository implements ICardRepository {
     });
   }
 
+  public async activate(id: number, password: string): Promise<void> {
+    await prisma.card.update({
+      where: {
+        id,
+      },
+      data: {
+        password,
+      },
+    });
+  }
+
+  public async findById(id: number): Promise<PrismaCard | null> {
+    return prisma.card.findUnique({
+      where: {
+        id,
+      },
+    });
+  }
+
   public async findByTypeAndEmployeeId(
     type: BusinessType,
     employeeId: number

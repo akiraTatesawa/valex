@@ -1,8 +1,13 @@
+import Cryptr from "cryptr";
+import { randNumber } from "@ngneat/falso";
 import { prisma } from "../../src/config/prisma";
 import { CardFactory } from "../../src/services/CardServices/CardFactory";
 import { CompanyFactory } from "../../src/services/CompanyServices/CompanyFactory";
 import { EmployeeFactory } from "../../src/services/EmployeeServices/EmployeeFactory";
-import { CreateCardRequestBody } from "../../src/types/card";
+import {
+  CreateCardRequestBody,
+  ActivateCardRequestBody,
+} from "../../src/types/card";
 
 export class CardScenarios {
   private cardFactory: CardFactory;
@@ -10,6 +15,8 @@ export class CardScenarios {
   private companyFactory: CompanyFactory;
 
   private employeeFactory: EmployeeFactory;
+
+  private cryptr: Cryptr;
 
   constructor(
     cardFactory: CardFactory,
@@ -19,6 +26,7 @@ export class CardScenarios {
     this.cardFactory = cardFactory;
     this.companyFactory = companyFactory;
     this.employeeFactory = employeeFactory;
+    this.cryptr = new Cryptr(`${process.env.CRYPTR_SECRET}`);
   }
 
   public async createCardScenario() {
@@ -57,7 +65,7 @@ export class CardScenarios {
     const { prismaEmployee, createCardData, headers } =
       await this.createCardScenario();
 
-    const cardEntity = this.cardFactory.createCard({
+    const { card: cardEntity } = this.cardFactory.createCard({
       cardholderName: prismaEmployee.fullName,
       employeeId: prismaEmployee.id,
       type: createCardData.type,
@@ -68,5 +76,19 @@ export class CardScenarios {
     });
 
     return { prismaCard, createCardData, headers };
+  }
+
+  public async activateCardScenario() {
+    const { prismaCard } = await this.conflictCardScenario();
+
+    const { securityCode: encryptedCVV } = prismaCard;
+    const securityCode = this.cryptr.decrypt(encryptedCVV);
+
+    const activateCardData: ActivateCardRequestBody = {
+      password: randNumber({ min: 1000, max: 9999 }).toString(),
+      securityCode,
+    };
+
+    return { activateCardData, id: prismaCard.id };
   }
 }

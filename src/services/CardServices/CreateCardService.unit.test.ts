@@ -31,7 +31,7 @@ describe("Create Card Service", () => {
   it("Should be able to create a card", async () => {
     const mockCompany = new CompanyFactory().createCompany();
     const mockEmployee = new EmployeeFactory().createEmployee();
-    const mockCard = new CardFactory().createCard();
+    const { card: mockCard } = new CardFactory().createCard();
 
     const { apikey } = mockCompany;
     const { id: employeeId } = mockEmployee;
@@ -66,7 +66,7 @@ describe("Create Card Service", () => {
   it("Should throw an error and not be able to create a card if user already has a card with same type", async () => {
     const mockCompany = new CompanyFactory().createCompany();
     const mockEmployee = new EmployeeFactory().createEmployee();
-    const mockCard = new CardFactory().createCard();
+    const { card: mockCard } = new CardFactory().createCard();
     const { apikey } = mockCompany;
     const { id: employeeId } = mockEmployee;
     const type: BusinessType = "education";

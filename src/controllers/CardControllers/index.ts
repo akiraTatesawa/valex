@@ -5,6 +5,9 @@ import { GetEmployeeServiceImpl } from "../../services/EmployeeServices/GetEmplo
 import { GetCompanyServiceImpl } from "../../services/CompanyServices/GetCompanyService";
 import { CreateCardServiceImpl } from "../../services/CardServices/CreateCardService";
 import { CreateCardController } from "./CreateCardController";
+import { ActivateCardController } from "./ActivateCardController";
+import { CardValidatorImpl } from "../../services/CardServices/CardValidator";
+import { ActivateCardServiceImpl } from "../../services/CardServices/ActivateCardService";
 
 export function createCardControllerFactory(): CreateCardController {
   const cardRepository = new PrismaCardRepository();
@@ -22,4 +25,16 @@ export function createCardControllerFactory(): CreateCardController {
   );
 
   return new CreateCardController(createCardService);
+}
+
+export function activateCardControllerFactory(): ActivateCardController {
+  const cardRepository = new PrismaCardRepository();
+
+  const cardValidator = new CardValidatorImpl(cardRepository);
+  const activateCardService = new ActivateCardServiceImpl(
+    cardRepository,
+    cardValidator
+  );
+
+  return new ActivateCardController(activateCardService);
 }
