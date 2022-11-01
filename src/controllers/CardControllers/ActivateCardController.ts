@@ -5,7 +5,7 @@ import { Controller } from "../Controller";
 import { ActivateCardRequestBody } from "../../types/card";
 
 export class ActivateCardController extends Controller<ActivateCardService> {
-  async handle(req: Request, res: Response): Promise<void> {
+  public async handle(req: Request, res: Response): Promise<void> {
     const { password, securityCode } = req.body as ActivateCardRequestBody;
     const { id } = req.params as { id: string };
 

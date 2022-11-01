@@ -5,7 +5,7 @@ import { Controller } from "../Controller";
 import { CreateCardRequestBody } from "../../types/card";
 
 export class CreateCardController extends Controller<CreateCardService> {
-  async handle(req: Request, res: Response): Promise<void> {
+  public async handle(req: Request, res: Response): Promise<void> {
     const { employeeId, type } = req.body as CreateCardRequestBody;
     const apikey = req.headers["x-api-key"] as string;
 

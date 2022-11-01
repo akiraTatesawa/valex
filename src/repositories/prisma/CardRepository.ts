@@ -21,6 +21,17 @@ export class PrismaCardRepository implements ICardRepository {
     });
   }
 
+  public async block(id: number): Promise<void> {
+    await prisma.card.update({
+      where: {
+        id,
+      },
+      data: {
+        isBlocked: true,
+      },
+    });
+  }
+
   public async findById(id: number): Promise<PrismaCard | null> {
     return prisma.card.findUnique({
       where: {

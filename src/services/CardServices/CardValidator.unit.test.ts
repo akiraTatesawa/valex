@@ -77,6 +77,26 @@ describe("Card Validator", () => {
     });
   });
 
+  describe("Ensure card is active", () => {
+    it("Should be able to validade without throwing", () => {
+      const { card: mockCard } = new CardFactory().createCard({
+        password: "1234",
+      });
+
+      expect(() => {
+        cardValidator.ensureCardIsActive(mockCard);
+      }).not.toThrow();
+    });
+
+    it("Should throw error if card is not active", () => {
+      const { card: mockCard } = new CardFactory().createCard();
+
+      expect(() => {
+        cardValidator.ensureCardIsActive(mockCard);
+      }).toThrow();
+    });
+  });
+
   describe("Validate Security Code", () => {
     it("Should be able to validate the CVV without throwing", () => {
       const { card: mockCard, CVV } = new CardFactory().createCard();
@@ -93,6 +113,44 @@ describe("Card Validator", () => {
 
       expect(() => {
         cardValidator.validateSecurityCodeOrFail(mockCard, CVV);
+      }).toThrow();
+    });
+  });
+
+  describe("Validate Password", () => {
+    it("Should be able to validate password without throwing", () => {
+      const { card, password } = new CardFactory().createActiveCard();
+
+      expect(() => {
+        cardValidator.validatePasswordOrFail(card, password);
+      }).not.toThrow();
+    });
+
+    it("Should throw error if password is incorrect", () => {
+      const { card } = new CardFactory().createActiveCard();
+
+      expect(() => {
+        cardValidator.validatePasswordOrFail(card, "1111");
+      }).toThrow();
+    });
+  });
+
+  describe("Ensure card is not blocked", () => {
+    it("Should be able to validate without throwing", () => {
+      const { card: mockCard } = new CardFactory().createCard();
+
+      expect(() => {
+        cardValidator.ensureCardIsNotBlocked(mockCard);
+      }).not.toThrow();
+    });
+
+    it("Should throw error if card is already blocked", () => {
+      const { card: mockCard } = new CardFactory().createCard({
+        isBlocked: true,
+      });
+
+      expect(() => {
+        cardValidator.ensureCardIsNotBlocked(mockCard);
       }).toThrow();
     });
   });

@@ -1,5 +1,6 @@
 import Cryptr from "cryptr";
 import { randNumber } from "@ngneat/falso";
+import bcrypt from "bcrypt";
 import { prisma } from "../../src/config/prisma";
 import { CardFactory } from "../../src/services/CardServices/CardFactory";
 import { CompanyFactory } from "../../src/services/CompanyServices/CompanyFactory";
@@ -89,6 +90,24 @@ export class CardScenarios {
       securityCode,
     };
 
-    return { activateCardData, id: prismaCard.id };
+    return { activateCardData, id: prismaCard.id, prismaCard };
+  }
+
+  public async blockCardScenario({ isBlocked }: { isBlocked: boolean }) {
+    const { id, activateCardData } = await this.activateCardScenario();
+
+    const encryptedPass = bcrypt.hashSync(activateCardData.password, 10);
+
+    await prisma.card.update({
+      where: {
+        id,
+      },
+      data: {
+        password: encryptedPass,
+        isBlocked,
+      },
+    });
+
+    return { id, password: activateCardData.password };
   }
 }

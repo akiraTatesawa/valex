@@ -29,7 +29,7 @@ class Seed {
 
   private generateBusiness(type: BusinessType) {
     return Business.create({
-      name: randBrand(),
+      name: randBrand() + randCompanyName(),
       type,
     }).props;
   }

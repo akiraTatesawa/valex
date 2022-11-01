@@ -8,4 +8,6 @@ export class MockCardRepository implements ICardRepository {
   create = jest.fn();
 
   findByTypeAndEmployeeId = jest.fn();
+
+  block = jest.fn();
 }

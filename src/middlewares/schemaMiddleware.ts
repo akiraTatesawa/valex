@@ -1,12 +1,18 @@
 import { NextFunction, Request, Response } from "express";
-import { createCardSchema, apiKeySchema, paramsIdSchema } from "../schemas";
+import {
+  createCardSchema,
+  apiKeySchema,
+  paramsIdSchema,
+  activateCardSchema,
+  blockUnblockCardSchema,
+} from "../schemas";
 
 import { CustomError } from "../errors";
-import { activateCardSchema } from "../schemas/cardSchemas";
 
 const BodySchemas = {
   createCardSchema,
   activateCardSchema,
+  blockUnblockCardSchema,
 };
 
 type BodyValidator = keyof typeof BodySchemas;
@@ -20,7 +26,7 @@ export function validateBody(validator: BodyValidator) {
 
     if (error) {
       const message = error.details.map((detail) => detail.message).join("; ");
-      throw new CustomError("error_unprocessable_entity", message);
+      throw new CustomError("error_bad_request", message);
     }
 
     return next();
@@ -43,7 +49,7 @@ export function validateHeader(validator: HeaderValidator) {
 
     if (error) {
       const message = error.details.map((detail) => detail.message).join("; ");
-      throw new CustomError("error_unprocessable_entity", message);
+      throw new CustomError("error_bad_request", message);
     }
 
     return next();
@@ -66,7 +72,7 @@ export function validateParams(validator: ParamsValidator) {
 
     if (error) {
       const message = error.details.map((detail) => detail.message).join("; ");
-      throw new CustomError("error_unprocessable_entity", message);
+      throw new CustomError("error_bad_request", message);
     }
 
     return next();

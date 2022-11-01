@@ -47,7 +47,7 @@ describe("PATCH /cards/:id/activate", () => {
       .patch(`/cards/invalid/activate`)
       .send(activateCardData);
 
-    expect(response.statusCode).toEqual(httpStatus.UNPROCESSABLE_ENTITY);
+    expect(response.statusCode).toEqual(httpStatus.BAD_REQUEST);
     expect(response.body).toHaveProperty("message");
   });
 
@@ -58,7 +58,7 @@ describe("PATCH /cards/:id/activate", () => {
       .patch(`/cards/${id}/activate`)
       .send({ ...activateCardData, invalid: "invalid" });
 
-    expect(response.statusCode).toEqual(httpStatus.UNPROCESSABLE_ENTITY);
+    expect(response.statusCode).toEqual(httpStatus.BAD_REQUEST);
     expect(response.body).toHaveProperty("message");
   });
 });

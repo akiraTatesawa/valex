@@ -12,6 +12,9 @@ describe("Activate Card Service", () => {
     validateCardOrFail: jest.fn(),
     validateExpirationDateOrFail: jest.fn(),
     validateSecurityCodeOrFail: jest.fn(),
+    ensureCardIsActive: jest.fn(),
+    ensureCardIsNotBlocked: jest.fn(),
+    validatePasswordOrFail: jest.fn(),
   };
 
   const service = new ActivateCardServiceImpl(repository, cardValidator);
