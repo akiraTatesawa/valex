@@ -1,4 +1,5 @@
 import {
+  randBrand,
   randCompanyName,
   randEmail,
   randFullName,
@@ -28,7 +29,7 @@ class Seed {
 
   private generateBusiness(type: BusinessType) {
     return Business.create({
-      name: randCompanyName(),
+      name: randBrand(),
       type,
     }).props;
   }
@@ -45,6 +46,8 @@ class Seed {
         .$queryRaw`TRUNCATE TABLE employees RESTART IDENTITY CASCADE`;
       await this.prisma
         .$queryRaw`TRUNCATE TABLE businesses RESTART IDENTITY CASCADE`;
+      await this.prisma
+        .$queryRaw`TRUNCATE TABLE cards RESTART IDENTITY CASCADE`;
 
       console.log("\nCreating company...");
       const companyEntity = Company.create({ name: randCompanyName() });

@@ -1,4 +1,5 @@
 import { Card as PrismaCard } from "@prisma/client";
+import Cryptr from "cryptr";
 import { ServiceExecute } from "../../types/services";
 import { BusinessType } from "../../types/business";
 import { GetCompanyService } from "../CompanyServices/GetCompanyService";
@@ -15,7 +16,15 @@ interface CreateCardRequest {
 
 type ValidateCardType = Omit<CreateCardRequest, "apikey">;
 
-type CreateCardResponse = PrismaCard;
+type CreateCardResponse = Pick<
+  PrismaCard,
+  | "id"
+  | "cardholderName"
+  | "number"
+  | "securityCode"
+  | "expirationDate"
+  | "type"
+>;
 
 export interface CreateCardService
   extends ServiceExecute<CreateCardRequest, CreateCardResponse> {}
@@ -54,6 +63,19 @@ export class CreateCardServiceImpl implements CreateCardService {
     }
   }
 
+  private sanitizeCard(card: PrismaCard): CreateCardResponse {
+    const cryptr = new Cryptr(`${process.env.CRYPTR_SECRET}`);
+
+    return {
+      id: card.id,
+      cardholderName: card.cardholderName,
+      expirationDate: card.expirationDate,
+      number: card.number,
+      securityCode: cryptr.decrypt(card.securityCode),
+      type: card.type,
+    };
+  }
+
   public async execute({
     apikey,
     employeeId,
@@ -76,6 +98,8 @@ export class CreateCardServiceImpl implements CreateCardService {
       type,
     });
 
-    return this.cardRepository.create(newCard.props);
+    const prismaCard = await this.cardRepository.create(newCard.props);
+
+    return this.sanitizeCard(prismaCard);
   }
 }

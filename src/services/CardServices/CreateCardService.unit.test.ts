@@ -31,6 +31,8 @@ describe("Create Card Service", () => {
   it("Should be able to create a card", async () => {
     const mockCompany = new CompanyFactory().createCompany();
     const mockEmployee = new EmployeeFactory().createEmployee();
+    const mockCard = new CardFactory().createCard();
+
     const { apikey } = mockCompany;
     const { id: employeeId } = mockEmployee;
     const type: BusinessType = "education";
@@ -38,6 +40,7 @@ describe("Create Card Service", () => {
     jest
       .spyOn(cardRepository, "findByTypeAndEmployeeId")
       .mockResolvedValueOnce(null);
+    jest.spyOn(cardRepository, "create").mockResolvedValueOnce(mockCard);
     jest
       .spyOn(getEmployeeService, "execute")
       .mockResolvedValueOnce(mockEmployee);

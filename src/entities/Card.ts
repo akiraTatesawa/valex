@@ -59,7 +59,7 @@ export class Card extends Entity<CardProps> {
     const formattedCardholderName = this.formatCardholderName(cardholderName);
     const cardNumber = randCreditCardNumber();
     const securityCode = cryptr.encrypt(randCreditCardCVV());
-    const expirationDate = dayjs().add(7, "year").format("MM/YY");
+    const expirationDate = dayjs().add(5, "year").format("MM/YY");
 
     return new Card({
       cardholderName: formattedCardholderName,
