@@ -9,3 +9,7 @@ export interface ActivateCardRequestBody {
   password: string;
   securityCode: string;
 }
+
+export interface BlockUnblockCardRequestBody {
+  password: string;
+}

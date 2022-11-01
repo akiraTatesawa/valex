@@ -1,13 +1,14 @@
 import { Router } from "express";
 import {
+  blockCardControllerFactory,
+  activateCardControllerFactory,
+  createCardControllerFactory,
+} from "../controllers/CardControllers/index";
+import {
   validateHeader,
   validateBody,
   validateParams,
 } from "../middlewares/schemaMiddleware";
-import {
-  activateCardControllerFactory,
-  createCardControllerFactory,
-} from "../controllers/CardControllers";
 
 export const cardRouter = Router();
 
@@ -23,4 +24,10 @@ cardRouter
     validateParams("id"),
     validateBody("activateCardSchema"),
     (req, res) => activateCardControllerFactory().handle(req, res)
+  )
+  .patch(
+    "/:id/block",
+    validateParams("id"),
+    validateBody("blockUnblockCardSchema"),
+    (req, res) => blockCardControllerFactory().handle(req, res)
   );

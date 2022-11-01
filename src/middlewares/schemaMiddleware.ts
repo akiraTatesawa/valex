@@ -1,12 +1,18 @@
 import { NextFunction, Request, Response } from "express";
-import { createCardSchema, apiKeySchema, paramsIdSchema } from "../schemas";
+import {
+  createCardSchema,
+  apiKeySchema,
+  paramsIdSchema,
+  activateCardSchema,
+  blockUnblockCardSchema,
+} from "../schemas";
 
 import { CustomError } from "../errors";
-import { activateCardSchema } from "../schemas/cardSchemas";
 
 const BodySchemas = {
   createCardSchema,
   activateCardSchema,
+  blockUnblockCardSchema,
 };
 
 type BodyValidator = keyof typeof BodySchemas;
