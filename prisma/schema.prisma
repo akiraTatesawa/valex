@@ -60,10 +60,21 @@ model Card {
   isVirtual      Boolean      @default(false)
   type           BusinessType
 
-  originalCard   Card?  @relation("VirtualCards", fields: [originalCardId], references: [id])
+  originalCard   Card?      @relation("VirtualCards", fields: [originalCardId], references: [id])
   originalCardId Int?
-  virtualCard    Card[] @relation("VirtualCards")
+  virtualCard    Card[]     @relation("VirtualCards")
+  Recharge       Recharge[]
 
   @@unique([employeeId, type], name: "employee_type")
   @@map("cards")
+}
+
+model Recharge {
+  id        Int      @id @default(autoincrement())
+  card      Card     @relation(fields: [cardId], references: [id])
+  cardId    Int
+  amount    Int
+  timestamp DateTime
+
+  @@map("recharges")
 }
