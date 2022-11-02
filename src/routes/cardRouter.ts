@@ -3,6 +3,7 @@ import {
   blockCardControllerFactory,
   activateCardControllerFactory,
   createCardControllerFactory,
+  unblockCardControllerFactory,
 } from "../controllers/CardControllers/index";
 import {
   validateHeader,
@@ -30,4 +31,10 @@ cardRouter
     validateParams("id"),
     validateBody("blockUnblockCardSchema"),
     (req, res) => blockCardControllerFactory().handle(req, res)
+  )
+  .patch(
+    "/:id/unblock",
+    validateParams("id"),
+    validateBody("blockUnblockCardSchema"),
+    (req, res) => unblockCardControllerFactory().handle(req, res)
   );

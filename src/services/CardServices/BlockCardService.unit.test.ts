@@ -3,19 +3,12 @@ import { BlockCardServiceImpl } from "./BlockCardService";
 import { ICardRepository } from "../../repositories/ICardRepository";
 import { CardValidator } from "./CardValidator";
 import { CardFactory } from "./CardFactory";
+import { MockCardValidator } from "./mocks/MockCardValidator";
 
 describe("Block Card Service", () => {
   const repository: ICardRepository = new MockCardRepository();
 
-  const cardValidator: CardValidator = {
-    ensureCardIsNotActive: jest.fn(),
-    validateCardOrFail: jest.fn(),
-    validateExpirationDateOrFail: jest.fn(),
-    validateSecurityCodeOrFail: jest.fn(),
-    ensureCardIsActive: jest.fn(),
-    ensureCardIsNotBlocked: jest.fn(),
-    validatePasswordOrFail: jest.fn(),
-  };
+  const cardValidator: CardValidator = new MockCardValidator();
 
   const service = new BlockCardServiceImpl(repository, cardValidator);
 

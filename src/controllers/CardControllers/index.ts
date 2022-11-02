@@ -10,6 +10,8 @@ import { CardValidatorImpl } from "../../services/CardServices/CardValidator";
 import { ActivateCardServiceImpl } from "../../services/CardServices/ActivateCardService";
 import { BlockCardController } from "./BlockCardController";
 import { BlockCardServiceImpl } from "../../services/CardServices/BlockCardService";
+import { UnblockCardController } from "./UnblockCardController";
+import { UnblockCardServiceImpl } from "../../services/CardServices/UnblockCardService";
 
 export function createCardControllerFactory(): CreateCardController {
   const cardRepository = new PrismaCardRepository();
@@ -51,4 +53,15 @@ export function blockCardControllerFactory(): BlockCardController {
   );
 
   return new BlockCardController(blockCardService);
+}
+
+export function unblockCardControllerFactory(): UnblockCardController {
+  const cardRepository = new PrismaCardRepository();
+  const cardValidator = new CardValidatorImpl(cardRepository);
+  const unblockCardService = new UnblockCardServiceImpl(
+    cardValidator,
+    cardRepository
+  );
+
+  return new UnblockCardController(unblockCardService);
 }

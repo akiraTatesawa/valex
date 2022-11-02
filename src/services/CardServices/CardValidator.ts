@@ -19,6 +19,7 @@ export interface CardValidator {
   validateSecurityCodeOrFail(card: PrismaCard, cvv: string): void;
   validatePasswordOrFail(card: PrismaCard, reqPass: string): void;
   ensureCardIsNotBlocked(card: PrismaCard): void;
+  ensureCardIsBlocked(card: PrismaCard): void;
 }
 
 export class CardValidatorImpl implements CardValidator {
@@ -91,6 +92,15 @@ export class CardValidatorImpl implements CardValidator {
       throw new CustomError(
         "error_unprocessable_entity",
         "The card is blocked"
+      );
+    }
+  }
+
+  public ensureCardIsBlocked({ isBlocked }: PrismaCard): void {
+    if (!isBlocked) {
+      throw new CustomError(
+        "error_unprocessable_entity",
+        "The card is unblocked"
       );
     }
   }
