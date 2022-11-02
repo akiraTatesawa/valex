@@ -3,7 +3,7 @@ import { MockCardRepository } from "../../repositories/mocks/MockCardRepository"
 import { CardValidator } from "./CardValidator";
 import { MockCardValidator } from "./mocks/MockCardValidator";
 import { CardFactory } from "./CardFactory";
-import { UnblockCardServiceImpl } from "./UblockCardService";
+import { UnblockCardServiceImpl } from "./UnblockCardService";
 
 describe("Unblock Card Service", () => {
   const repository: ICardRepository = new MockCardRepository();
