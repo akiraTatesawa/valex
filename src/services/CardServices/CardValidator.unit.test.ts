@@ -53,7 +53,7 @@ describe("Card Validator", () => {
 
       expect(() => {
         cardValidator.validateExpirationDateOrFail(mockCard);
-      }).toThrow();
+      }).toThrow("The card is expired");
     });
   });
 
@@ -73,7 +73,7 @@ describe("Card Validator", () => {
 
       expect(() => {
         cardValidator.ensureCardIsNotActive(mockCard);
-      }).toThrow();
+      }).toThrow("The card is already active");
     });
   });
 
@@ -93,7 +93,7 @@ describe("Card Validator", () => {
 
       expect(() => {
         cardValidator.ensureCardIsActive(mockCard);
-      }).toThrow();
+      }).toThrow("Card is not active");
     });
   });
 
@@ -113,7 +113,7 @@ describe("Card Validator", () => {
 
       expect(() => {
         cardValidator.validateSecurityCodeOrFail(mockCard, CVV);
-      }).toThrow();
+      }).toThrow("Wrong CVV");
     });
   });
 
@@ -131,7 +131,7 @@ describe("Card Validator", () => {
 
       expect(() => {
         cardValidator.validatePasswordOrFail(card, "1111");
-      }).toThrow();
+      }).toThrow("Wrong password");
     });
   });
 
@@ -151,7 +151,27 @@ describe("Card Validator", () => {
 
       expect(() => {
         cardValidator.ensureCardIsNotBlocked(mockCard);
-      }).toThrow();
+      }).toThrow("The card is blocked");
+    });
+  });
+
+  describe("Ensure card is blocked", () => {
+    it("Should be able to validate without throwing", () => {
+      const { card: mockCard } = new CardFactory().createCard({
+        isBlocked: true,
+      });
+
+      expect(() => {
+        cardValidator.ensureCardIsBlocked(mockCard);
+      }).not.toThrow();
+    });
+
+    it("Should throw error if card is already unblocked", () => {
+      const { card: mockCard } = new CardFactory().createCard();
+
+      expect(() => {
+        cardValidator.ensureCardIsBlocked(mockCard);
+      }).toThrow("The card is unblocked");
     });
   });
 });
