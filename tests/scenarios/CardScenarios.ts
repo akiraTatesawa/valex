@@ -5,6 +5,7 @@ import { prisma } from "../../src/config/prisma";
 import { CardFactory } from "../../src/services/CardServices/CardFactory";
 import { CompanyFactory } from "../../src/services/CompanyServices/CompanyFactory";
 import { EmployeeFactory } from "../../src/services/EmployeeServices/EmployeeFactory";
+import { CreateRechargeRequestBody } from "../../src/types/recharges";
 import {
   CreateCardRequestBody,
   ActivateCardRequestBody,
@@ -30,7 +31,7 @@ export class CardScenarios {
     this.cryptr = new Cryptr(`${process.env.CRYPTR_SECRET}`);
   }
 
-  public async createCardScenario() {
+  public async companyEmployeeScenario() {
     const companyEntity = this.companyFactory.createCompany();
 
     const prismaCompany = await prisma.company.create({
@@ -45,13 +46,24 @@ export class CardScenarios {
       data: employeeEntity,
     });
 
+    const headers = {
+      "x-api-key": prismaCompany.apikey,
+    };
+
+    return {
+      prismaCompany,
+      prismaEmployee,
+      headers,
+    };
+  }
+
+  public async createCardScenario() {
+    const { headers, prismaCompany, prismaEmployee } =
+      await this.companyEmployeeScenario();
+
     const createCardData: CreateCardRequestBody = {
       employeeId: prismaEmployee.id,
       type: "education",
-    };
-
-    const headers = {
-      "x-api-key": prismaCompany.apikey,
     };
 
     return {
@@ -80,7 +92,7 @@ export class CardScenarios {
   }
 
   public async activateCardScenario() {
-    const { prismaCard } = await this.conflictCardScenario();
+    const { prismaCard, headers } = await this.conflictCardScenario();
 
     const { securityCode: encryptedCVV } = prismaCard;
     const securityCode = this.cryptr.decrypt(encryptedCVV);
@@ -90,11 +102,11 @@ export class CardScenarios {
       securityCode,
     };
 
-    return { activateCardData, id: prismaCard.id, prismaCard };
+    return { activateCardData, id: prismaCard.id, prismaCard, headers };
   }
 
   public async blockCardScenario({ isBlocked }: { isBlocked: boolean }) {
-    const { id, activateCardData } = await this.activateCardScenario();
+    const { id, activateCardData, headers } = await this.activateCardScenario();
 
     const encryptedPass = bcrypt.hashSync(activateCardData.password, 10);
 
@@ -108,6 +120,16 @@ export class CardScenarios {
       },
     });
 
-    return { id, password: activateCardData.password };
+    return { id, password: activateCardData.password, headers };
+  }
+
+  public async rechargeCardScenario({ amount }: { amount: number }) {
+    const { headers, id } = await this.blockCardScenario({ isBlocked: false });
+
+    const requestData: CreateRechargeRequestBody = {
+      amount,
+    };
+
+    return { headers, requestData, id };
   }
 }
