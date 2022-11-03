@@ -1,5 +1,3 @@
-import { Card as PrismaCard } from "@prisma/client";
-import Cryptr from "cryptr";
 import { ServiceExecute } from "../../types/services";
 import { BusinessType } from "../../types/business";
 import { GetCompanyService } from "../CompanyServices/GetCompanyService";
@@ -7,6 +5,8 @@ import { GetEmployeeService } from "../EmployeeServices/GetEmployeeService";
 import { ICardRepository } from "../../repositories/ICardRepository";
 import { CustomError } from "../../errors";
 import { Card } from "../../entities/Card";
+import { CardDTO } from "../../dtos";
+import { CardMapper } from "../../mappers";
 
 interface CreateCardRequest {
   apikey: string;
@@ -16,15 +16,7 @@ interface CreateCardRequest {
 
 type ValidateCardType = Omit<CreateCardRequest, "apikey">;
 
-type CreateCardResponse = Pick<
-  PrismaCard,
-  | "id"
-  | "cardholderName"
-  | "number"
-  | "securityCode"
-  | "expirationDate"
-  | "type"
->;
+type CreateCardResponse = CardDTO;
 
 export interface CreateCardService
   extends ServiceExecute<CreateCardRequest, CreateCardResponse> {}
@@ -63,33 +55,17 @@ export class CreateCardServiceImpl implements CreateCardService {
     }
   }
 
-  private sanitizeCard(card: PrismaCard): CreateCardResponse {
-    const cryptr = new Cryptr(`${process.env.CRYPTR_SECRET}`);
-
-    return {
-      id: card.id,
-      cardholderName: card.cardholderName,
-      expirationDate: card.expirationDate,
-      number: card.number,
-      securityCode: cryptr.decrypt(card.securityCode),
-      type: card.type,
-    };
-  }
-
   public async execute({
     apikey,
     employeeId,
     type,
-  }: CreateCardRequest): Promise<CreateCardResponse> {
-    // Validate Company by APIKEY or fail
+  }: CreateCardRequest): Promise<CardDTO> {
     await this.validateCompany.execute({ apiKey: apikey });
 
-    // Validate Employee by employeeId or fail
     const employee = await this.validateEmployee.execute({
       id: employeeId,
     });
 
-    // Validate if Employee already has a card with the same type
     await this.validateUniqueCardType({ employeeId, type });
 
     const newCard = Card.create({
@@ -100,6 +76,6 @@ export class CreateCardServiceImpl implements CreateCardService {
 
     const prismaCard = await this.cardRepository.create(newCard.props);
 
-    return this.sanitizeCard(prismaCard);
+    return new CardMapper().toDTO(prismaCard);
   }
 }
