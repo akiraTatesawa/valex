@@ -25,6 +25,6 @@ export class GetCardBalanceServiceImpl implements GetCardBalanceService {
       rechargesTotal += recharge.amount;
     });
 
-    return paymentsTotal + rechargesTotal;
+    return rechargesTotal - paymentsTotal;
   }
 }

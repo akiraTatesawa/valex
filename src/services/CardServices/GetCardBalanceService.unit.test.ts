@@ -27,7 +27,7 @@ describe("Get Card Balance Service", () => {
     const payments: Payment[] = [payment, payment];
     const recharges: RechargeDTO[] = [recharge, recharge];
 
-    expect(service.execute({ payments, recharges })).toEqual(4);
+    expect(service.execute({ payments, recharges })).toEqual(0);
   });
 
   it("Should return the balance when payments is an empty array", () => {

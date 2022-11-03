@@ -6,6 +6,7 @@ import {
   activateCardControllerFactory,
   createCardControllerFactory,
   unblockCardControllerFactory,
+  getCardStatementControllerFactory,
 } from "../controllers/CardControllers";
 import { validateHeader, validateBody, validateParams } from "../middlewares";
 
@@ -42,4 +43,7 @@ cardRouter
     validateHeader("x-api-key"),
     validateBody("createRechargeSchema"),
     (req, res) => createRechargeControllerFactory().handle(req, res)
+  )
+  .get("/:id/statement", validateParams("id"), (req, res) =>
+    getCardStatementControllerFactory().handle(req, res)
   );
