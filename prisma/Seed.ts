@@ -6,9 +6,7 @@ import {
   randNumber,
 } from "@ngneat/falso";
 import { PrismaClient } from "@prisma/client";
-import { Company } from "../src/entities/Company";
-import { Employee } from "../src/entities/Employee";
-import { Business } from "../src/entities/Business";
+import { Company, Employee, Business } from "../src/entities";
 import { BusinessType } from "../src/types/business";
 
 class Seed {

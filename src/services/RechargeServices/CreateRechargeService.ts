@@ -1,8 +1,8 @@
 import { ServiceExecute } from "../../types/services";
 import { IRechargeRepository } from "../../repositories/IRechargeRepository";
 import { CardValidator } from "../CardServices/CardValidator";
-import { RechargeDTO } from "../../dtos/RechargeDTO";
-import { Recharge } from "../../entities/Recharge";
+import { RechargeDTO } from "../../dtos";
+import { Recharge } from "../../entities";
 import { RechargeMapper } from "../../mappers";
 import { GetCompanyService } from "../CompanyServices/GetCompanyService";
 

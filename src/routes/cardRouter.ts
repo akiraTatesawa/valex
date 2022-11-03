@@ -1,4 +1,5 @@
 import { Router } from "express";
+
 import { createRechargeControllerFactory } from "../controllers/RechargeControllers";
 import {
   blockCardControllerFactory,
@@ -6,11 +7,7 @@ import {
   createCardControllerFactory,
   unblockCardControllerFactory,
 } from "../controllers/CardControllers";
-import {
-  validateHeader,
-  validateBody,
-  validateParams,
-} from "../middlewares/schemaMiddleware";
+import { validateHeader, validateBody, validateParams } from "../middlewares";
 
 export const cardRouter = Router();
 

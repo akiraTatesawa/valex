@@ -4,7 +4,7 @@ import { GetCompanyService } from "../CompanyServices/GetCompanyService";
 import { GetEmployeeService } from "../EmployeeServices/GetEmployeeService";
 import { ICardRepository } from "../../repositories/ICardRepository";
 import { CustomError } from "../../errors";
-import { Card } from "../../entities/Card";
+import { Card } from "../../entities";
 import { CardDTO } from "../../dtos";
 import { CardMapper } from "../../mappers";
 

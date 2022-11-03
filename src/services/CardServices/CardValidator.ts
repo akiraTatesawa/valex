@@ -6,7 +6,7 @@ import { Card as PrismaCard } from "@prisma/client";
 import Cryptr from "cryptr";
 import bcrypt from "bcrypt";
 import { ICardRepository } from "../../repositories/ICardRepository";
-import { CustomError } from "../../errors/index";
+import { CustomError } from "../../errors";
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(customParseFormat);
