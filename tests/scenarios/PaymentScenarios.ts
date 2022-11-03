@@ -43,4 +43,19 @@ export class PaymentScenarios {
 
     return { business, prismaCard, recharge, password };
   }
+
+  public async createStatementScenario() {
+    const { business, prismaCard } = await this.createPayment();
+
+    await prisma.payment.create({
+      data: {
+        amount: 500,
+        timestamp: new Date(),
+        cardId: prismaCard.id,
+        businessId: business.id,
+      },
+    });
+
+    return { prismaCard };
+  }
 }
