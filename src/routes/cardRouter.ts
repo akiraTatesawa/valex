@@ -1,10 +1,11 @@
 import { Router } from "express";
+import { createRechargeControllerFactory } from "../controllers/RechargeControllers";
 import {
   blockCardControllerFactory,
   activateCardControllerFactory,
   createCardControllerFactory,
   unblockCardControllerFactory,
-} from "../controllers/CardControllers/index";
+} from "../controllers/CardControllers";
 import {
   validateHeader,
   validateBody,
@@ -37,4 +38,11 @@ cardRouter
     validateParams("id"),
     validateBody("blockUnblockCardSchema"),
     (req, res) => unblockCardControllerFactory().handle(req, res)
+  )
+  .post(
+    "/:id/recharge",
+    validateParams("id"),
+    validateHeader("x-api-key"),
+    validateBody("createRechargeSchema"),
+    (req, res) => createRechargeControllerFactory().handle(req, res)
   );

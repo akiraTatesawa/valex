@@ -5,6 +5,7 @@ import {
   paramsIdSchema,
   activateCardSchema,
   blockUnblockCardSchema,
+  createRechargeSchema,
 } from "../schemas";
 
 import { CustomError } from "../errors";
@@ -13,6 +14,7 @@ const BodySchemas = {
   createCardSchema,
   activateCardSchema,
   blockUnblockCardSchema,
+  createRechargeSchema,
 };
 
 type BodyValidator = keyof typeof BodySchemas;

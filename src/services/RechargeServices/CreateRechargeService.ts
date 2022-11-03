@@ -1,13 +1,15 @@
 import { ServiceExecute } from "../../types/services";
 import { IRechargeRepository } from "../../repositories/IRechargeRepository";
 import { CardValidator } from "../CardServices/CardValidator";
-import { RechargeMapper } from "../../mappers/RechargeMapper";
 import { RechargeDTO } from "../../dtos/RechargeDTO";
 import { Recharge } from "../../entities/Recharge";
+import { RechargeMapper } from "../../mappers";
+import { GetCompanyService } from "../CompanyServices/GetCompanyService";
 
 interface CreateRechargeRequest {
   amount: number;
   cardId: number;
+  apikey: string;
 }
 
 export interface CreateRechargeService
@@ -18,18 +20,25 @@ export class CreateRechargeServiceImpl implements CreateRechargeService {
 
   private cardValidator: CardValidator;
 
+  private companyValidator: GetCompanyService;
+
   constructor(
     rechargeRepository: IRechargeRepository,
-    cardValidator: CardValidator
+    cardValidator: CardValidator,
+    companyValidator: GetCompanyService
   ) {
     this.rechargeRepository = rechargeRepository;
     this.cardValidator = cardValidator;
+    this.companyValidator = companyValidator;
   }
 
   async execute({
     amount,
     cardId,
+    apikey,
   }: CreateRechargeRequest): Promise<RechargeDTO> {
+    await this.companyValidator.execute({ apiKey: apikey });
+
     const card = await this.cardValidator.validateCardOrFail(cardId);
 
     this.cardValidator.ensureCardIsActive(card);
