@@ -2,7 +2,7 @@ import { Card as PrismaCard } from "@prisma/client";
 import { randFullName, randNumber } from "@ngneat/falso";
 import Cryptr from "cryptr";
 import bcrypt from "bcrypt";
-import { Card } from "../../entities/Card";
+import { Card } from "../../entities";
 
 type PartialCardProps = Partial<PrismaCard>;
 

@@ -1,9 +1,9 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import supertest from "supertest";
 import httpStatus from "http-status";
-import { TestHelpers } from "../helpers/index";
+import { TestHelpers } from "../helpers";
 import { close, init, app } from "../../src/app";
-import { cardScenariosFactory } from "../scenarios/index";
+import { cardScenariosFactory } from "../scenarios";
 
 describe("PATCH /cards/:id/activate", () => {
   beforeEach(async () => {
