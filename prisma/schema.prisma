@@ -40,9 +40,10 @@ enum BusinessType {
 }
 
 model Business {
-  id   Int          @id @default(autoincrement())
-  name String       @unique
-  type BusinessType
+  id      Int          @id @default(autoincrement())
+  name    String       @unique
+  type    BusinessType
+  Payment Payment[]
 
   @@map("businesses")
 }
@@ -64,6 +65,7 @@ model Card {
   originalCardId Int?
   virtualCard    Card[]     @relation("VirtualCards")
   Recharge       Recharge[]
+  Payment        Payment[]
 
   @@unique([employeeId, type], name: "employee_type")
   @@map("cards")
@@ -77,4 +79,16 @@ model Recharge {
   timestamp DateTime
 
   @@map("recharges")
+}
+
+model Payment {
+  id         Int      @id @default(autoincrement())
+  card       Card     @relation(fields: [cardId], references: [id])
+  cardId     Int
+  business   Business @relation(fields: [businessId], references: [id])
+  businessId Int
+  amount     Int
+  timestamp  DateTime
+
+  @@map("payments")
 }

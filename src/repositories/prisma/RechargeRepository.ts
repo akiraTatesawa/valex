@@ -11,4 +11,12 @@ export class PrismaRechargeRepository implements IRechargeRepository {
       data,
     });
   }
+
+  async findByCardId(cardId: number): Promise<Recharge[]> {
+    return prisma.recharge.findMany({
+      where: {
+        cardId,
+      },
+    });
+  }
 }
