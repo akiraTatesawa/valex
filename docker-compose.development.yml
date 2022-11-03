@@ -1,0 +1,44 @@
+version: '3'
+services:
+  valex-postgres-development:
+    image: postgres:13-alpine
+    container_name: valex-postgres-development
+    env_file: .env.development
+    environment:
+      POSTGRES_USER: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DATABASE}
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    volumes:
+      - valex-postgres-data:/var/lib/postgresql/data
+    command: postgres -p ${POSTGRES_PORT}
+
+  valex-development:
+    build:
+      context: .
+      dockerfile: Dockerfile.development
+    container_name: drivent-development
+    depends_on:
+      - valex-postgres-development
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '10m'
+        max-file: '5'
+    working_dir: /usr/src/
+    command: bash -c "npx prisma generate && npx prisma migrate dev && npm run dev"
+    env_file: .env.development
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ./src:/usr/src/src
+      - ./prisma:/usr/src/prisma
+      - ./.env.development:/usr/src/.env.development
+      - ./tsconfig.json:/usr/src/tsconfig.json
+    ports:
+      - 4000:4000
+      
+volumes:
+  valex-postgres-data:
+  
