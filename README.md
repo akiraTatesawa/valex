@@ -31,7 +31,13 @@
         - [Request](#request-5)
         - [Response](#response-6)
   - [⚙️ How to Run](#️-how-to-run)
+    - [Cloning the Application](#cloning-the-application)
+    - [Environment Variables](#environment-variables)
     - [Running Locally](#running-locally)
+    - [Running on Docker](#running-on-docker)
+  - [🔍 Testing the Application](#-testing-the-application)
+    - [Locally](#locally)
+      - [Docker](#docker)
 
 ## 📌 Description
 
@@ -335,4 +341,116 @@ POST /payments/pos
 
 ## ⚙️ How to Run
 
+### Cloning the Application
+
+1. Clone the application to your machine:
+
+   ```bash
+   git clone https://github.com/akiraTatesawa/valex.git
+   ```
+
+2. Navigate to the application dir:
+
+    ```bash
+    cd valex/
+    ```
+
+3. Install the dependencies:
+
+    ```bash
+    npm i
+    ```
+
+### Environment Variables
+
+1. Set up a **.env.development** file on the root of the project following the example on **.env.example**:
+   - `PORT`: The port where the node app is going to run;
+   - `POSTGRES_USERNAME`: Your postgres username;
+   - `POSTGRES_PASSWORD`: Your postgres password;
+   - `POSTGRES_HOST`: Your postgres host;
+   - `POSTGRES_PORT`: The port where postgres is running;
+   - `POSTGRES_DATABASE`: The name of the database;
+   - `DATABASE_URL`: The URL of the postgres database;
+   - `CRYPTR_SECRET`: The secret key used for encrypting data;
+
+2. The postgres related variables are going to change depending on whether you are going to run the app locally or on docker;
+
 ### Running Locally
+
+1. Run the prisma migration command:
+
+    ```bash
+    npm run dev:migrate
+    ```
+
+2. Run the prisma db seed command:
+
+    ```bash
+    npm run dev:seed
+    ```
+
+3. Run the application and have fun!
+
+    ```bash
+    npm run dev
+    ```
+
+### Running on Docker
+
+1. Run the postgres command:
+
+    ```bash
+    npm run dev:postgres
+    ```
+
+2. Run the node app docker command:
+
+    ```bash
+    npm run dev:docker
+    ```
+
+3. On another terminal, run the seed command:
+
+    ```bash
+    npm run dev:docker:seed
+    ```
+
+4. Have fun!
+
+## 🔍 Testing the Application
+
+### Locally
+
+1. Set up a **.env.test** file following the **.env.example** model;
+2. Run the testing command:
+
+    ```bash
+    npm run test
+    ```
+
+#### Docker
+
+1. Set up a **.env.test** file following the **.env.example** model;
+2. If you are running the dev application, drop it with the following command:
+
+    ```bash
+    npm run dev:docker:down
+    ```
+
+3. Create the postgres testing container:
+
+    ```bash
+    npm run test:postgres
+    ```
+
+4. Run the docker testing command:
+
+    ```bash
+    npm run test:docker
+    ```
+
+5. After the test, drop the testing containers:
+
+    ```bash
+    npm run test:docker:down
+    ```
