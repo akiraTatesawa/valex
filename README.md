@@ -1,10 +1,14 @@
 # 💳 Valex
 
+## 📌 Description
+
+Valex is a **voucher card** API responsible for creating, reloading, activating, as well as processing purchases.
+
 ## 🗒️ Contents
 
 - [💳 Valex](#-valex)
-  - [🗒️ Contents](#️-contents)
   - [📌 Description](#-description)
+  - [🗒️ Contents](#️-contents)
   - [🚧 Status](#-status)
   - [🧰 Built With](#-built-with)
   - [🧭 API Reference](#-api-reference)
@@ -37,11 +41,7 @@
     - [Running on Docker](#running-on-docker)
   - [🔍 Testing the Application](#-testing-the-application)
     - [Locally](#locally)
-      - [Docker](#docker)
-
-## 📌 Description
-
-Valex is a **voucher card** API responsible for creating, reloading, activating, as well as processing purchases.
+    - [Docker](#docker)
 
 ## 🚧 Status
 
@@ -428,7 +428,7 @@ POST /payments/pos
     npm run test
     ```
 
-#### Docker
+### Docker
 
 1. Set up a **.env.test** file following the **.env.example** model;
 2. If you are running the dev application, drop it with the following command:
