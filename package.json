@@ -14,7 +14,7 @@
     "test:docker:down": "npm run test:compose -- down",
     "build": "npx tsc && npx prisma generate && npx prisma migrate deploy && npx prisma db seed",
     "start": "node ./dist/src/server.js",
-    "dev": "ts-node-dev --respawn --transpile-only --exit-child --ignore-watch node_modules ./src/server.ts",
+    "dev": "dotenv -e .env.development -- ts-node-dev --respawn --transpile-only --exit-child --ignore-watch node_modules ./src/server.ts",
     "dev:migrate": "dotenv -e .env.development -- npx prisma generate && dotenv -e .env.development -- npx prisma migrate dev",
     "dev:compose": "docker-compose -f docker-compose.development.yml --env-file .env.development",
     "dev:postgres": "npm run dev:compose -- up -d valex-postgres-development",
